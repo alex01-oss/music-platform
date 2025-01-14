@@ -7,6 +7,7 @@ import {
   Grid2,
 } from "@mui/material";
 import React from "react";
+import styles from "../styles/components.module.scss";
 
 interface StepWrapperProps {
   children: React.ReactNode;
@@ -24,12 +25,8 @@ const StepWrapper: React.FC<StepWrapperProps> = ({ activeStep, children }) => {
           </Step>
         ))}
       </Stepper>
-      <Grid2
-        container
-        justifyContent="center"
-        style={{ margin: "70px 0 ", height: 270 }}
-      >
-        <Card style={{ width: 600 }}>{children}</Card>
+      <Grid2 container className={styles.container}>
+        <Card className={styles.children}>{children}</Card>
       </Grid2>
     </Container>
   );

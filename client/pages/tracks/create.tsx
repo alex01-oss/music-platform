@@ -1,12 +1,12 @@
-import { StepWrapper } from "@/components/StepWrapper";
 import MainLayout from "@/layouts/MainLayout";
 import { Button, Grid2, TextField } from "@mui/material";
 import React, { useState } from "react";
 import styles from "../../styles/create.module.scss";
-import { FileUpload } from "@/components/FileUpload";
 import { useInput } from "@/hooks/useInput";
 import { useRouter } from "next/router";
 import axios from "axios";
+import StepWrapper from "@/components/StepWrapper";
+import FileUpload from "@/components/FileUpload";
 
 const create = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -63,12 +63,16 @@ const create = () => {
         )}
         {activeStep === 1 && (
           <FileUpload setFile={setPicture} accept="image/*">
-            <Button>Upload image</Button>
+            <Button className={styles.button}>
+              Drag & drop file here or click to upload
+            </Button>
           </FileUpload>
         )}
         {activeStep === 2 && (
           <FileUpload setFile={setAudio} accept="audio/*">
-            <Button>Upload track</Button>
+            <Button className={styles.button}>
+              Drag & drop file here or click to upload
+            </Button>
           </FileUpload>
         )}
       </StepWrapper>

@@ -22,9 +22,9 @@ export const playerReducer = (state = initionalState, action: PlayerAction): pla
             return {...state, currentTime: action.payload}
         case PlayerActionTypes.SET_VOLUME:
             return {...state, volume: action.payload}
+        case PlayerActionTypes.DELETE_TRACK:
+            return {...state, active: state.active?._id === action.payload ? null : state.active}
         default:
             return state
     }
 }
-
-export { PlayerAction }

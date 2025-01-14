@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import styles from "../styles/Player.module.scss";
+import styles from "../styles/components.module.scss";
 import TrackProgress from "./TrackProgress";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 import { useActions } from "../hooks/useActions";
@@ -12,6 +12,7 @@ const Player = () => {
   const { pause, volume, active, duration, currentTime } = useTypedSelector(
     (state) => state.player
   );
+
   const {
     pauseTrack,
     playTrack,
@@ -71,21 +72,23 @@ const Player = () => {
       <IconButton onClick={play}>
         {pause ? <PlayArrow /> : <Pause />}
       </IconButton>
-      <Grid2
-        container
-        direction="column"
-        style={{ width: 200, margin: "0 20px" }}
-      >
-        <div>{active?.name}</div>
-        <div style={{ fontSize: 12, color: "gray" }}>{active?.artist}</div>
+      <Grid2 container direction="column">
+        <div className={styles.name}>{active?.name}</div>
+        <div className={styles.artist}>{active?.artist}</div>
       </Grid2>
       <TrackProgress
         left={currentTime}
         right={duration}
         onChange={changeCurrentTime}
+        isTimeProgress={true}
       />
-      <VolumeUp style={{ marginLeft: "auto" }} />
-      <TrackProgress left={volume} right={100} onChange={changeVolume} />
+      <VolumeUp className={styles.volume} />
+      <TrackProgress
+        left={volume}
+        right={100}
+        onChange={changeVolume}
+        isTimeProgress={false}
+      />
     </div>
   );
 };

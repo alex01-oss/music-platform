@@ -9,7 +9,7 @@ export const pauseTrack = (): PlayerAction => {
     return {type: PlayerActionTypes.PAUSE}
 }
 
-export const setActiveTrack = (payload: ITrack): PlayerAction => {
+export const setActiveTrack = (payload: ITrack | null): PlayerAction => {
     return {type: PlayerActionTypes.SET_ACTIVE, payload}
 }
 

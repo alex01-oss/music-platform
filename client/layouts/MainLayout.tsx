@@ -33,7 +33,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Navbar />
-      <Container style={{ margin: "90px 0" }}>{children}</Container>
+      <Container style={{ margin: "90px auto" }}>{children}</Container>
       <Player />
     </>
   );

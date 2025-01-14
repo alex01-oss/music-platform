@@ -1,28 +1,95 @@
 import * as React from "react";
+import { styled, useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import CssBaseline from "@mui/material/CssBaseline";
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import List from "@mui/material/List";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 import { useRouter } from "next/router";
-import {
-  AppBar,
-  CssBaseline,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import { ChevronLeft, Inbox, Mail, Menu } from "@mui/icons-material";
+import { Album, Home, MusicNote } from "@mui/icons-material";
 
-const menuItems = [
-  { text: "Главная", href: "/" },
-  { text: "Список треков", href: "/tracks" },
-  { text: "Список альбомов", href: "/albums" },
-];
+const drawerWidth = 240;
+
+const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
+  open?: boolean;
+}>(({ theme }) => ({
+  flexGrow: 1,
+  padding: theme.spacing(3),
+  transition: theme.transitions.create("margin", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  marginLeft: `-${drawerWidth}px`,
+  variants: [
+    {
+      props: ({ open }) => open,
+      style: {
+        transition: theme.transitions.create("margin", {
+          easing: theme.transitions.easing.easeOut,
+          duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginLeft: 0,
+      },
+    },
+  ],
+}));
+
+interface AppBarProps extends MuiAppBarProps {
+  open?: boolean;
+}
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== "open",
+})<AppBarProps>(({ theme }) => ({
+  transition: theme.transitions.create(["margin", "width"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  variants: [
+    {
+      props: ({ open }) => open,
+      style: {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: `${drawerWidth}px`,
+        transition: theme.transitions.create(["margin", "width"], {
+          easing: theme.transitions.easing.easeOut,
+          duration: theme.transitions.duration.enteringScreen,
+        }),
+      },
+    },
+  ],
+}));
+
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: "flex-end",
+}));
 
 export default function Navbar() {
+  const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
+
+  const menuItems = [
+    { text: "Home", href: "/", icon: <Home /> },
+    { text: "Tracks", href: "/tracks", icon: <MusicNote /> },
+    { text: "Albums", href: "/albums", icon: <Album /> },
+  ];
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -33,44 +100,67 @@ export default function Navbar() {
   };
 
   return (
-    <div>
+    <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed">
+      <AppBar position="fixed" open={open}>
         <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
+            sx={[
+              {
+                mr: 2,
+              },
+              open && { display: "none" },
+            ]}
           >
-            <Menu />
+            <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Persistent drawer
+            VibeX
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer variant="persistent" anchor="left" open={open}>
-        <div>
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
+        }}
+        variant="persistent"
+        anchor="left"
+        open={open}
+      >
+        <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            <ChevronLeft />
+            {theme.direction === "ltr" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
           </IconButton>
-        </div>
+        </DrawerHeader>
+        <Divider />
         <List>
-          {menuItems.map(({ text, href }, index) => (
+          {menuItems.map(({ text, href, icon }, index) => (
             <ListItem
-              component="button"
               key={href}
               onClick={() => router.push(href)}
+              disablePadding
             >
-              <ListItemIcon>
-                {index % 2 === 0 ? <Inbox /> : <Mail />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemButton>
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
             </ListItem>
           ))}
         </List>
       </Drawer>
-    </div>
+    </Box>
   );
 }
